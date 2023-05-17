@@ -1,50 +1,186 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
+import Title from '../components/Title.astro';
+import Form from '../components/Form.astro';
 ---
 
 <Layout title="Welcome to Astro.">
 	<main>
-		<h1>Welcome to <span class="text-gradient">Astro</span></h1>
-		<p class="instructions">
-			To get started, open the directory <code>src/pages</code> in your project.<br />
-			<strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
-		</p>
-		<ul role="list" class="link-card-grid">
-			<Card
-				href="https://docs.astro.build/"
-				title="Documentation"
-				body="Learn how Astro works and explore the official API docs."
-			/>
-			<Card
-				href="https://astro.build/integrations/"
-				title="Integrations"
-				body="Supercharge your project with new frameworks and libraries."
-			/>
-			<Card
-				href="https://astro.build/themes/"
-				title="Themes"
-				body="Explore a galaxy of community-built starter themes."
-			/>
-			<Card
-				href="https://astro.build/chat/"
-				title="Community"
-				body="Come say hi to our amazing Discord community. ❤️"
-			/>
-		</ul>
+		<Form>
+			<Title />
+		</Form>
 	</main>
+	<dialog>
+		<div>
+			<header>
+				<h2>This is an homage to one of my favorite bits in the podcast <a href="https://twitter.com/shiphitspod">Ship Hits The Fan</a>!</h2>
+				<button type="button">Close</button>
+			</header>
+			<p>
+				You say there was a <b>14x10" hole</b> blasted in the side of the ship? 
+				Feet are so <i>passe</i> (and hard to understand), now you don't have to worry about it. 
+				You can rest easy knowing that hole is ~0.93 2023 prius' wide and ~0.66 2023 prius' tall.
+			</p>
+			<p><i>How are you getting the temperatures?</i> The average coolant temperature for a prius of an unknown year is roughly 195F. This is used across all years for simplicities sake.</p>
+			<p>Made with <span class="boat">⚓️</span> by <a href="https://gingerchew.link">ginger</a>.</p>
+		</div>
+	</dialog>
 </Layout>
-
-<style>
+<style is:global>
 	main {
 		margin: auto;
 		padding: 1.5rem;
-		max-width: 60ch;
+		max-width: 80ch;
+		container-type: inline-size;
+		transition: opacity 0.25s ease-out;
+	}
+	dialog > div {
+		width: 100%;
+		max-width: 65vw;
 	}
 	h1 {
+		line-height: 1.5;
 		font-size: 3rem;
-		font-weight: 800;
+		font-weight: 900;
 		margin: 0;
+		margin-block-end: 1ch;
+	}
+	.float {
+		position: relative;
+	}
+	.float label {
+		position: absolute;
+		top: 1.1rem;
+		left: 1.4rem;
+		color: var(--black);
+		
+		font-weight: 800;
+		transform-origin: top left;
+		transition: transform 0.25s ease;
+	}
+	::placeholder {
+		color: transparent;
+	}
+	form {
+		container-type: inline-size;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		place-items: center;
+		align-content: center;
+		height: 100%;
+		min-height: 100vh;
+	}
+	
+	output.text-gradient {
+		font-size: clamp(32px, 10cqi, 54px);
+		display:flex;
+		flex-flow: column;
+		gap: 0.5cqi;
+		font-weight: 900;
+		grid-column: 1 / -1;
+		justify-self: end;
+		line-height: 1.1;
+	}
+
+	input,
+	select {
+
+		background-color: var(--yellow);
+		color: var(--black);
+		border: 3px solid transparent;
+		font-size: 1.1rem;
+		border-radius: 7.5px;
+		padding: 1rem 1.5rem;
+		font-weight: 700;
+		display: block;
+	}
+	input {
+		padding-top: 1.2rem;
+		padding-bottom: .8rem;
+	}
+	input:focus {
+		outline-color: transparent;
+		background-color: white;
+		border-color: var(--yellow);
+	}
+	button {
+		background-color: var(--dark-red);
+		color: #fff;
+		border: unset;
+		border-radius: 7.5px;
+		padding: 0.5em 1em;
+		font-size: clamp(1.5rem, 1.5vw, 48px);
+		user-select: none;
+		cursor: pointer;
+	}
+	dialog {
+		border-radius: 10px;
+		padding: 1.5rem 2rem;
+	}
+	dialog button {
+		font-size: 1rem;
+		margin-inline-start: auto;
+		display: inline-block;
+	}
+	dialog::backdrop {
+		background-image: var(--accent-gradient);
+	}
+	a {
+		color: var(--dark-red);
+	}
+	a.text-gradient {
+		text-decoration: solid underline;
+		display: inline-block;
+		line-height: 1;
+	}
+	a.text-gradient:hover {
+		background-image: linear-gradient(var(--black));
+
+		-webkit-background-clip: unset;
+		-webkit-text-fill-color: unset;
+	}
+	header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1rem;
+	}
+	.float:focus-within label,
+	.float input:not(:placeholder-shown) + label {
+		transform: scale(0.75) translateY(-15px);
+	}
+	.stack {
+		display: flex;
+		gap: 0.5rem;
+		flex-flow: column;
+	}
+	.boat {
+		font-size: 1.25rem;
+	}
+	@media (min-width: 580px) and (max-width: 768px) {
+		.stack {
+			flex-flow: row wrap;
+			justify-content: center;
+		}
+	}
+	@media (max-width: 768px) {
+		h1 {
+			text-align: center;
+		}
+		button {
+			margin-inline: auto;
+			display: block;
+		}
+		form {
+			grid-template-columns: 1fr;
+			justify-content: center;
+			gap: 1.5rem;
+		}
+		output.text-gradient {
+			flex: 1 0 100%;
+			text-align: center;
+			justify-self: center;
+		}
 	}
 	.text-gradient {
 		background-image: var(--accent-gradient);
@@ -52,6 +188,9 @@ import Card from '../components/Card.astro';
 		-webkit-text-fill-color: transparent;
 		background-size: 400%;
 		background-position: 0%;
+		font-size: 12cqi;
+		user-select: none;
+		line-height: 0.6;
 	}
 	.instructions {
 		line-height: 1.6;
@@ -71,11 +210,5 @@ import Card from '../components/Card.astro';
 	}
 	.instructions strong {
 		color: rgb(var(--accent));
-	}
-	.link-card-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 1rem;
-		padding: 0;
 	}
 </style>
