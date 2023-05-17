@@ -1,0 +1,203 @@
+<form action="/">
+    <slot></slot>
+    <div class="stack">
+        <div class="float">
+            <input type="text" id="amount" placeholder="Length">
+            <label for="amount" id="unitType">Length</label>
+        </div>
+        <select name="unit" id="unit">
+            <option value="bc">Barleycorn</option>
+            <option value="inches">Inches</option>
+            <option value="feet" selected>Feet</option>
+            <option value="meter">Meter</option>
+            <option value="yards">Yard</option>
+            <option value="fathom">Fathom</option>
+            <option value="f">Farenheit</option>
+            <option value="c">Celsius</option>
+            <option value="all">All</option>
+        </select>
+        <select name="year" id="year">
+            <option value="181">2023</option>
+            <option value="180">2022</option>
+            <option value="180">2021</option>
+            <option value="180">2020</option>
+            <option value="180">2019</option>
+            <option value="178.7">2018</option>
+            <option value="178.7">2017</option>
+            <option value="178.7">2016</option>
+            <option value="176.4">2015</option>
+            <option value="176">2014</option>
+            <option value="176">2013</option>
+            <option value="176">2012</option>
+            <option value="176">2011</option>
+            <option value="176">2010</option>
+            <option value="175">2009</option>
+            <option value="175">2008</option>
+            <option value="175">2007</option>
+            <option value="175">2006</option>
+            <option value="175">2005</option>
+            <option value="175">2004</option>
+            <option value="170">2003</option>
+            <option value="170">2002</option>
+            <option value="170">2001</option>
+            <option value="169.68">2000</option>
+            <option value="163">1999</option>
+            <option value="163">1998</option>
+            <option value="163">1997</option>
+        </select>
+    </div>
+    <output class="text-gradient"></output>
+</form>
+<script>
+import Units from '../lib/units';
+
+const AVERAGE_COOLANT_TEMP_F = 195;
+
+const btn = document.querySelector('button');
+const dialog = document.querySelector('dialog');
+const close = dialog.querySelector('button');
+const unitType = document.querySelector<HTMLLabelElement>('#unitType');
+btn.addEventListener('click', (e) => dialog.hasAttribute('open') ? dialog.close() : dialog.showModal(), true);
+close.onclick = () => dialog.close();
+
+const input = document.querySelector<HTMLInputElement>('#amount');
+const unitSelect = document.querySelector<HTMLSelectElement>('#unit');
+const yearSelect = document.querySelector<HTMLSelectElement>('#year');
+
+const calcOutput = () => {
+    const unit = unitSelect.value;
+    const amount = parseFloat(input.value);
+    const yearInInches = +yearSelect.value;
+    const yearInFeet = Units.Inches.to_feet(yearInInches);
+    // let value = unit === 'feet' ? amount : getFromMeters(amount);
+    const value = amount;
+    const output = document.querySelector<HTMLOutputElement>('output');
+    if (value !== value) return '';
+    let num = 0;
+    let label = '';
+    
+    switch (unit) {
+        case 'all':
+            const inches = Units.Feet.to_inches(value);
+            const meters = Units.Feet.to_meter(value);
+            const yards = Units.Feet.to_yards(value);
+            const bc = Units.Feet.to_bc(value);
+            const fathom = Units.Feet.to_fathom(value);
+            const prius = value / yearInFeet;
+            output.innerHTML = `
+            <div>${Units.fix(value)} feet (default)</div>
+            <div>${Units.fix(bc)} barley corns</div>
+            <div>${Units.fix(inches)} inches</div>
+            <div>${Units.fix(meters)} meters</div>
+            <div>${Units.fix(yards)} yards</div>
+            <div>${Units.fix(fathom)} fathoms</div>
+            <div>${Units.fix(prius)} prius</div>`
+            return;
+        case 'bc':
+            num = Units.Barley.to_inches(value) / yearInInches;
+            break;
+        case 'yards':
+            num = Units.Yards.to_inches(value) / yearInInches;
+            // output.textContent = `${ / getInYards(yearInFeet)} prius`
+            break;
+        case 'feet':
+            num = Units.Feet.to_inches(value) / yearInInches;
+            // output.textContent = `${value / yearInFeet} prius`
+            break;
+        case 'inches':
+            num = value / yearInInches;
+            // output.textContent = `${value / yearInInches} prius`;
+            break;
+        case 'fathom':
+            num = Units.Fathom.to_inches(value) / yearInInches;
+            // output.textContent = `${value / getInFathoms(yearInFeet)} prius`
+            break;
+        case 'meter':
+            num = Units.Meter.to_inches(value) / yearInInches;
+            // output.textContent = `${value / getInMeters(yearInFeet)} prius`
+            break;
+        case 'f':
+            num = value / AVERAGE_COOLANT_TEMP_F;
+            break;
+        case 'c':
+            num = Units.Celsius.to_farenheit(value) / AVERAGE_COOLANT_TEMP_F;
+            break;``
+        default:
+            output.textContent = '';
+            num = 0;
+            break;
+    }
+
+    if (['c','f'].includes(unit)) {
+        unitType.textContent = 'Degrees';
+    } else {
+        unitType.textContent = 'Length'
+    }
+    if (num !== 0) {
+        label = Units.fix(num, 7);
+        if (unit !== 'bc') {
+            label = Units.fix(num);
+        }
+        
+        if (!Units.isWhole(num)) {
+            label = '~'+label
+        }
+    }
+    
+    output.textContent = `${label} prius`;
+}
+
+input.addEventListener('input', () => calcOutput());
+let prevUnit = 'feet';
+unitSelect.addEventListener('change', () => {
+    // let prevValueInInches = 0;
+    const newUnit = unitSelect.value;
+
+    if (prevUnit === newUnit) return;
+    const num = +input.value;
+
+    if (newUnit !== 'all' && newUnit !== 'c' && newUnit !== 'f') {
+        switch (prevUnit) {
+            case 'feet':
+                input.value = Units.Feet.to(newUnit, num);
+                break;
+            case 'yards':
+                input.value = Units.Yards.to(newUnit,num);
+                break;
+            case 'fathom':
+                input.value = Units.Fathom.to(newUnit, num);
+                break;
+            case 'meter':
+                input.value = Units.Meter.to(newUnit, num);
+                break;
+            case 'bc':
+                input.value = Units.Barley.to(newUnit, num);
+                break;
+            case 'inches':
+                input.value = Units.Inches.to(newUnit, num);
+                break;
+            case 'f':
+                if (newUnit !== 'c') input.value = '0';
+                else {
+                    input.value = ''+Units.Farenheit.to_celsius(num);
+                }
+                break;
+            case 'c':
+                if (newUnit !== 'f') input.value = '0';
+                else {
+                    input.value = ''+Units.Celsius.to_farenheit(num);
+                }
+            default:
+                break;
+        }
+    } else {
+        input.value = ''+0;
+    }
+    prevUnit = newUnit;
+
+    console.log({ prevUnit, newUnit, num });
+    
+    calcOutput()
+});
+yearSelect.addEventListener('change', () => calcOutput());
+</script>
