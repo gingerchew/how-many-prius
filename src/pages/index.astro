@@ -4,7 +4,7 @@ import Title from '../components/Title.astro';
 import Form from '../components/Form.astro';
 ---
 
-<Layout title="Welcome to Astro.">
+<Layout title="How Many Prius?" description="Looking to figure out the length of something based on the length of a 2003 Toyota Prius? Look no further!">
 	<main>
 		<Form>
 			<Title />
@@ -23,6 +23,10 @@ import Form from '../components/Form.astro';
 			</p>
 			<p><i>How are you getting the temperatures?</i> The average coolant temperature for a prius of an unknown year is roughly 195F. This is used across all years for simplicities sake.</p>
 			<p>Made with <span class="boat">⚓️</span> by <a href="https://gingerchew.link">ginger</a>.</p>
+			<details>
+				<summary>Disclaimer-y stuff</summary>
+				<p>All dimensions were found off of Google's auto generated answers, so to attribute them properly is impossible. Analytics is done by Plausible.io, a privacy respecting google analytics alternative. This is made as an homage to the podcast Ship Hits The Fan, a RoosterTeeth production.</p>
+			</details>
 		</div>
 	</dialog>
 </Layout>
