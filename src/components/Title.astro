@@ -1,0 +1,94 @@
+<div class="title">
+    <h1 class="mainTitle">What is that in <span class="text-gradient">Prius'</span></h1>
+    <h1 aria-hidden="true" class="eggTitle" hidden>
+        May your <br/><span class="text-gradient">bones</span><br/> bleach in these <br/><span class="text-gradient">sands</span>.
+    </h1>
+    <h1 aria-hidden="true" hidden="hidden" class="momTitle">
+        Did you know <br/><span class="text-gradient">Charlotte</span><br/>has a band?<br/>Check out <br/><a href="https://momshome.bandcamp.com/" class="text-gradient">Mom's Home!</a><br/>
+    </h1>
+    <button type="button"><small>What is this?</small></button>
+</div>
+<script>
+	const title = document.querySelector<HTMLHeadingElement>('.mainTitle');
+	const egg = document.querySelector<HTMLHeadingElement>('.eggTitle');
+    const momTitle = document.querySelector<HTMLHeadingElement>('.momTitle');
+
+    class Title {
+        title:HTMLHeadingElement;
+        constructor(title:HTMLHeadingElement) {
+            this.title = title;
+        }
+
+        reveal() {
+            document.querySelectorAll('h1').forEach(h1 => h1.toggleAttribute('hidden', true));
+
+            this.title.removeAttribute('hidden');
+        }
+    }
+
+    class Pattern {
+        pattern:string[];
+        title:HTMLHeadingElement;
+        position = 0;
+        _q = [];
+        revealed = false;
+        constructor(pattern:string, title:HTMLHeadingElement) {
+            this.pattern = pattern.split('');
+            this.title = title;
+        }
+
+        get isComplete() {
+            return this._q.length === this.pattern.length;
+        }
+
+        validate(key:string) {
+            const check = this.pattern[this.position] === key;
+            if (check) {
+                this.position++;
+                this._q.push(key);
+            } else {
+                this.revealed = false;
+                this.position = 0;
+                this._q = [];
+            }
+
+            if (this.pattern.length === this._q.length) {
+                this.reveal()
+            }
+            console.log({ check, key, pattern: this.pattern, q: this._q });
+
+            return check;
+        }
+
+        reveal() {
+            this.revealed = true;
+            document.querySelectorAll('h1').forEach(h1 => h1.toggleAttribute('hidden', true));
+
+            this.title.removeAttribute('hidden');
+        }
+
+        reset() {
+            this.title.setAttribute('hidden', '');
+            this.position = 0;
+            this._q = [];
+        }
+    }
+
+    
+    const heading = new Title(title)
+    const bones = new Pattern('bones', egg);
+    const mom = new Pattern('mom', momTitle);
+
+	document.addEventListener('keydown', ({ key }) => {
+
+        bones.validate(key);
+        mom.validate(key);
+
+        if (bones.isComplete || mom.isComplete) {
+            bones.isComplete && bones.reveal();
+            mom.isComplete && mom.reveal();
+        } else {
+            heading.reveal();
+        }
+	}, false)
+</script>
