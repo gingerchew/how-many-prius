@@ -13,7 +13,7 @@ import Form from '../components/Form.astro';
 	<dialog>
 		<div>
 			<header>
-				<h2>This is an homage to one of my favorite bits in the podcast <a href="https://twitter.com/shiphitspod">Ship Hits The Fan</a>!</h2>
+				<h2>This is an homage to one of my favorite bits in the podcast&nbsp;Ship&nbsp;Hits&nbsp;the&nbsp;Fan!</h2>
 				<button type="button">Close</button>
 			</header>
 			<p>
@@ -21,9 +21,10 @@ import Form from '../components/Form.astro';
 				Feet are so <i>passe</i> (and hard to understand), now you don't have to worry about it. 
 				You can rest easy knowing that hole is ~0.93 2023 prius' wide and ~0.66 2023 prius' tall.
 			</p>
+			<p><i>Are there any easter eggs?</i> Maybe, you can ask your <b>M O M</b> if you want, but you should be able to feel it in your <b>B O N E S</b>.</p>
 			<p><i>How are you getting the temperatures?</i> The average coolant temperature for a prius of an unknown year is roughly 195F. This is used across all years for simplicities sake.</p>
 			<p><i>How are you getting knots?</i> It's based off of the average max speed of prius' from 2004 - 2018 (Arbitrary Range).</p>
-			<p>Made with <span class="boat">⚓️</span> by <a href="https://gingerchew.link">ginger</a>.</p>
+			<p>Made with <span class="egg-boat">⚓️</span><span class="egg-mom">🏳️‍⚧️</span><span class="egg-bones">☠️</span> by <a href="https://gingerchew.link">ginger</a>.</p>
 			<details>
 				<summary>Disclaimer-y stuff</summary>
 				<p>All dimensions were found off of Google's auto generated answers, so to attribute them properly is impossible. Analytics is done by Plausible.io, a privacy respecting google analytics alternative. This is made as an homage to the podcast Ship Hits The Fan, a RoosterTeeth production.</p>
@@ -161,8 +162,19 @@ import Form from '../components/Form.astro';
 		gap: 0.5rem;
 		flex-flow: column;
 	}
-	.boat {
+	.egg-bones,
+	.egg-boat,
+	.egg-mom {
 		font-size: 1.25rem;
+	}
+	:root:not(.bones) .egg-bones {
+		display: none;
+	}
+	:root:is(.mom, .bones) .egg-boat {
+		display: none;
+	}
+	:root:not(.mom) .egg-mom {
+		display: none;
 	}
 	@media (min-width: 580px) and (max-width: 768px) {
 		.stack {
@@ -198,6 +210,9 @@ import Form from '../components/Form.astro';
 		font-size: 12cqi;
 		user-select: none;
 		line-height: 0.6;
+	}
+	.text-gradient::selection {
+		background-image: linear-gradient(45deg, var(--black));
 	}
 	.instructions {
 		line-height: 1.6;

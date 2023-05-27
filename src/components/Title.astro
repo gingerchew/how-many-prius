@@ -12,7 +12,7 @@
 	const title = document.querySelector<HTMLHeadingElement>('.mainTitle');
 	const egg = document.querySelector<HTMLHeadingElement>('.eggTitle');
     const momTitle = document.querySelector<HTMLHeadingElement>('.momTitle');
-
+    const meta = document.querySelector<HTMLMetaElement>('[name="theme-color"]');
     class Title {
         title:HTMLHeadingElement;
         constructor(title:HTMLHeadingElement) {
@@ -20,6 +20,8 @@
         }
 
         reveal() {
+            document.documentElement.className = '';
+            document.querySelector<HTMLMetaElement>('[name="theme-color"]').setAttribute('content', getComputedStyle(document.documentElement).getPropertyValue('--_theme'));
             document.querySelectorAll('h1').forEach(h1 => h1.toggleAttribute('hidden', true));
 
             this.title.removeAttribute('hidden');
@@ -29,12 +31,14 @@
     class Pattern {
         pattern:string[];
         title:HTMLHeadingElement;
+        className:string;
         position = 0;
         _q = [];
         revealed = false;
-        constructor(pattern:string, title:HTMLHeadingElement) {
+        constructor(pattern:string, title:HTMLHeadingElement, className?:string) {
             this.pattern = pattern.split('');
             this.title = title;
+            this.className = className ?? pattern;
         }
 
         get isComplete() {
@@ -55,22 +59,20 @@
             if (this.pattern.length === this._q.length) {
                 this.reveal()
             }
-            console.log({ check, key, pattern: this.pattern, q: this._q });
 
             return check;
         }
 
         reveal() {
+            console.log('revealing');
             this.revealed = true;
+            document.documentElement.className = '';
+            meta.setAttribute('content', getComputedStyle(document.documentElement).getPropertyValue('--'+this.className+'_theme'));
+            console.log(meta.content);
             document.querySelectorAll('h1').forEach(h1 => h1.toggleAttribute('hidden', true));
 
             this.title.removeAttribute('hidden');
-        }
-
-        reset() {
-            this.title.setAttribute('hidden', '');
-            this.position = 0;
-            this._q = [];
+            document.documentElement.className = this.className;
         }
     }
 

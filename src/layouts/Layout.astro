@@ -16,7 +16,7 @@ const { title, description } = Astro.props;
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		<link rel="icon" href="https://fav.farm/🚗" />
-		<meta name="theme-color" content="#d8bd97">
+		<meta name="theme-color" content="#f1f2fa">
 	</head>
 	<body>
 		<slot />
@@ -30,9 +30,20 @@ const { title, description } = Astro.props;
 		--accent-gradient: linear-gradient(45deg, var(--light-red), var(--dark-red) 30%, white 60%);
 		--light-red: #f04b3e;
 		--dark-red: #8b2a22;
-		--tan: #d8bd97;
+		--tan: #f1f2fa;
 		--black: #131313;
 		--yellow: #fec33e;
+		--_theme: #f1f2fa;
+		--mom_theme: rgb(132, 224, 234);
+		--bones_theme: #f1f2fa;
+	}
+	:root.mom {
+		--accent: 40, 115, 123;
+		--accent-gradient: linear-gradient(45deg, rgb(var(--accent)), rgb(var(--accent)) 100%);
+		--dark-red: hsl(186, 51%, 32%);
+		--tan: hsl(186, 71%, 72%);
+		--yellow: rgb(248,214,84);
+		--_theme: rgb(132, 224, 234);
 	}
 	*::selection {
 		color: var(--black);
