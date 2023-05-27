@@ -81,8 +81,33 @@ class Fathom extends Unit {
     static to_yards = (value:number) => this.to_feet(value) / 3;
 }
 
+
+const MILES_KNOTS = 1.151;
+const MILES_KPH = 1.609;
+
+class Miles extends Unit {
+    static to = (unit: string, value:number) => this['to_' + unit](value);
+    static to_knots = (value:number) => value / MILES_KNOTS
+    static to_kph = (value:number) => value * MILES_KPH;
+}
+
+class Knots extends Unit {
+    static to = (unit: string, value: number) => this['to_'+unit](value);
+    static to_mph = (value: number) => value * MILES_KNOTS
+    static to_kph = (value: number) => this.to_mph(value) / MILES_KPH;
+}
+
+class KPH extends Unit {
+    static to = (unit: string, value:number) => this['to_'+unit](value);
+    static to_mph = (value:number) => value / MILES_KPH;
+    static to_knots = (value:number) => this.to_mph(value) * MILES_KNOTS;
+}
+
 export default {
     ...Unit,
+    KPH,
+    Knots,
+    Miles,
     Inches,
     Barley,
     Meter,

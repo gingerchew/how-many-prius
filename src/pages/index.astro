@@ -22,6 +22,7 @@ import Form from '../components/Form.astro';
 				You can rest easy knowing that hole is ~0.93 2023 prius' wide and ~0.66 2023 prius' tall.
 			</p>
 			<p><i>How are you getting the temperatures?</i> The average coolant temperature for a prius of an unknown year is roughly 195F. This is used across all years for simplicities sake.</p>
+			<p><i>How are you getting knots?</i> It's based off of the average max speed of prius' from 2004 - 2018 (Arbitrary Range).</p>
 			<p>Made with <span class="boat">⚓️</span> by <a href="https://gingerchew.link">ginger</a>.</p>
 			<details>
 				<summary>Disclaimer-y stuff</summary>
@@ -88,7 +89,6 @@ import Form from '../components/Form.astro';
 
 	input,
 	select {
-
 		background-color: var(--yellow);
 		color: var(--black);
 		border: 3px solid transparent;
@@ -97,6 +97,9 @@ import Form from '../components/Form.astro';
 		padding: 1rem 1.15rem;
 		font-weight: 700;
 		display: block;
+	}
+	select {
+		appearance: none;
 	}
 	input {
 		padding-top: 1.2rem;

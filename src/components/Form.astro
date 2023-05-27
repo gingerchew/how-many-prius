@@ -14,6 +14,9 @@
             <option value="fathom">Fathom</option>
             <option value="f">Farenheit</option>
             <option value="c">Celsius</option>
+            <option value="kph">Kilometers / Hour</option>
+            <option value="mph">Miles / Hour</option>
+            <option value="knots">Knots</option>
             <option value="all">All</option>
         </select>
         <select name="year" id="year">
@@ -52,6 +55,7 @@
 import Units from '../lib/units';
 
 const AVERAGE_COOLANT_TEMP_F = 195;
+const AVERAGE_MAX_SPEED_MPH = 108.4545454545;
 
 const btn = document.querySelector('button');
 const dialog = document.querySelector('dialog');
@@ -69,7 +73,7 @@ const calcOutput = () => {
     const amount = parseFloat(input.value);
     const yearInInches = +yearSelect.value;
     const yearInFeet = Units.Inches.to_feet(yearInInches);
-    // let value = unit === 'feet' ? amount : getFromMeters(amount);
+    
     const value = amount;
     const output = document.querySelector<HTMLOutputElement>('output');
     if (value !== value) return '';
@@ -121,7 +125,16 @@ const calcOutput = () => {
             break;
         case 'c':
             num = Units.Celsius.to_farenheit(value) / AVERAGE_COOLANT_TEMP_F;
-            break;``
+            break;
+        case 'miles':
+            num = value / AVERAGE_MAX_SPEED_MPH;
+            break;
+        case 'kph':
+            num = Units.KPH.to_mph(value) / AVERAGE_MAX_SPEED_MPH;
+            break;
+        case 'knots':
+            num = Units.Knots.to_mph(value) / AVERAGE_MAX_SPEED_MPH;
+            break;
         default:
             output.textContent = '';
             num = 0;
@@ -130,6 +143,8 @@ const calcOutput = () => {
 
     if (['c','f'].includes(unit)) {
         unitType.textContent = 'Degrees';
+    } else if (['mps','kph','knots'].includes(unit)) {
+        unitType.textContent = 'Speed';
     } else {
         unitType.textContent = 'Length'
     }
@@ -187,6 +202,27 @@ unitSelect.addEventListener('change', () => {
                 else {
                     input.value = ''+Units.Celsius.to_farenheit(num);
                 }
+            case 'mph':
+                if (['knots','kph'].includes(newUnit)) {
+                    input.value = ''+Units.Miles.to(newUnit, num);
+                } else {
+                    input.value = '0';
+                }
+                break;
+            case 'kph':
+                if (['knots','mph'].includes(newUnit)) {
+                    input.value = ''+Units.KPH.to(newUnit, num);
+                } else {
+                    input.value = '0';
+                }
+                break;
+            case 'knots':
+                if (['mph','kph'].includes(newUnit)) {
+                    input.value = ''+Units.Knots.to(newUnit, num);
+                } else {
+                    input.value = '0';
+                }
+                break;
             default:
                 break;
         }
@@ -194,8 +230,6 @@ unitSelect.addEventListener('change', () => {
         input.value = ''+0;
     }
     prevUnit = newUnit;
-
-    console.log({ prevUnit, newUnit, num });
     
     calcOutput()
 });
